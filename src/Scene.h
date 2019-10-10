@@ -28,6 +28,7 @@ public:
 	void Add(const std::shared_ptr<CPrim> pPrim)
 	{
 		// --- PUT YOUR CODE HERE ---
+		m_vpPrims.push_back(pPrim);
 	}
 	/**
 	 * @brief Adds a new light to the scene
@@ -36,6 +37,7 @@ public:
 	void Add(const std::shared_ptr<ILight> pLight)
 	{
 		// --- PUT YOUR CODE HERE ---
+		m_vpLights.push_back(pLight);
 	}
   
 	/**
@@ -47,7 +49,13 @@ public:
 	bool Intersect(Ray& ray) const
 	{
 		// --- PUT YOUR CODE HERE ---
-		return false;
+		bool collide = false;
+		for(auto i = m_vpPrims.begin(); i != m_vpPrims.end(); ++i){
+			if((*i)->Intersect(ray)){
+				collide = true;
+			}
+		}
+		return collide;
 	}
 
 	/**
@@ -56,7 +64,7 @@ public:
 	bool Occluded(Ray& ray)
 	{
 		// --- PUT YOUR CODE HERE ---
-		return false;
+		return Intersect(ray);
 	}
 
 	/**
@@ -66,7 +74,14 @@ public:
 	Vec3f RayTrace(Ray& ray) const
 	{
 		// --- PUT YOUR CODE HERE ---
-		return Vec3f();
+		Vec3f color = m_bgColor;
+		for (auto primitive: m_vpPrims){
+			if (primitive->Intersect(ray)){
+				//return Vec3f(1, 1, 1);
+				color = ray.hit->getShader()->Shade(ray);
+			}
+		}
+		return color;
 	}
 
 

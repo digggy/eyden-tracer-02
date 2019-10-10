@@ -22,7 +22,11 @@ public:
 	virtual std::optional<Vec3f> Illuminate(Ray& ray) override
 	{
 		// --- PUT YOUR CODE HERE ---
-		return Vec3f();
+		Vec3f intensity; 
+		Vec3f dir = m_position - ray.org;
+		intensity = m_intensity/pow(cv::norm(dir),2);
+		ray.dir = normalize(dir);
+		return normalize(intensity);
 	}
 
 
