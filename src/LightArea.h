@@ -26,11 +26,20 @@ public:
 		, m_e2(p3 - p0)
 	{ 
 		// --- PUT YOUR CODE HERE ---
+		m_normal = normalize(m_e1.cross(m_e2));
+		m_area = (cv::norm(m_e1.cross(m_e2))/2) + (cv::norm((p1 - p2).cross(p3 - p2))/2);
 	}  
 
 	virtual std::optional<Vec3f> Illuminate(Ray& ray) override
 	{
 		// --- PUT YOUR CODE HERE ---
+		float random_vara = DirectGraphicalModels::random::U<float>(0,1);
+		float random_varb = DirectGraphicalModels::random::U<float>(0,1);
+		Vec3f position = (m_p0 + m_e1 * random_vara) + (m_p0 + m_e2 * random_varb);
+		Vec3f direction = position - ray.org;
+		Vec3f intensity = m_intensity/pow(cv::norm(direction),2);
+		ray.dir = normalize(direction);
+		return normalize(intensity);
 		return Vec3f();
 	}
 
