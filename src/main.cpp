@@ -79,6 +79,7 @@ Mat RenderFrame(void)
 
 int main(int argc, char* argv[])
 {
+	// main function
 	Mat img = RenderFrame();
 	imshow("Image", img);
 	waitKey();
